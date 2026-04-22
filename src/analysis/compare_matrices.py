@@ -1,27 +1,30 @@
 """
-Main runner: build, compare, visualize, and save both interaction matrices.
+Compare the two pre-built interaction matrices visually.
+Reads CSVs from data/ — run generate_matrices.py first if they don't exist.
 
-Usage:
-    .venv/bin/python compare_matrices.py
+Usage (from project root):
+    .venv/bin/python src/analysis/compare_matrices.py
 """
 
 import matplotlib
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
 import numpy as np
+import os
 import pandas as pd
 import seaborn as sns
 
-from matrices import build_tag_overlap_matrix, build_va_distance_matrix, CHARACTER_TAGS
-from stats import summarize, print_summary
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+FIG_DIR  = os.path.join(BASE_DIR, "figures")
 
-CSV_PATH   = "pseudo_labels.csv"
-OUT_CASE1  = "matrix_case1_tag_overlap.csv"
-OUT_CASE2  = "matrix_case2_va_distance_t095.csv"
-OUT_FIGURE = "matrix_comparison.png"
+CSV_PATH   = os.path.join(DATA_DIR, "pseudo_labels.csv")
+CASE1_PATH = os.path.join(DATA_DIR, "matrix_case1_tag_overlap.csv")
+CASE2_PATH = os.path.join(DATA_DIR, "matrix_case2_va_distance_t095.csv")
+OUT_FIGURE = os.path.join(FIG_DIR, "matrix_comparison.png")
 
-VA_THRESHOLD = 0.95
+CHARACTER_TAGS = ["energetic", "tense", "calm", "lyrical"]
 
 TAG_COLORS = {
     "energetic": "#E76F51",
@@ -122,25 +125,15 @@ def plot_spy(ax, matrix_df, sorted_ids, boundaries, title):
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    df = pd.read_csv(CSV_PATH)
+    df    = pd.read_csv(CSV_PATH)
+    case1 = pd.read_csv(CASE1_PATH, index_col="track_id")
+    case2 = pd.read_csv(CASE2_PATH, index_col="track_id")
+    case1.columns = case1.columns.astype(int)
+    case2.columns = case2.columns.astype(int)
     print(f"Loaded {len(df)} tracks")
 
-    case1 = build_tag_overlap_matrix(df)
-    case2 = build_va_distance_matrix(df, threshold=VA_THRESHOLD)
-
-    s1 = summarize(case1, "Case 1 — Tag Overlap (baseline)")
-    s2 = summarize(case2, f"Case 2 — VA Distance (threshold={VA_THRESHOLD})")
-    print_summary(s1)
-    print_summary(s2)
-
-    case1.to_csv(OUT_CASE1)
-    case2.to_csv(OUT_CASE2)
-    print(f"\nSaved: {OUT_CASE1}")
-    print(f"Saved: {OUT_CASE2}")
-
-    # Shared sort order and boundaries (both use tag-sorted rows for comparison)
-    s_ids  = sorted_ids_by_tag(df)
-    bounds = tag_boundaries(df)
+    s_ids   = sorted_ids_by_tag(df)
+    bounds  = tag_boundaries(df)
     tag_map = {row["track_id"]: dominant_tag(row) for _, row in df.iterrows()}
 
     legend_patches = [
@@ -148,10 +141,6 @@ def main():
         for t in CHARACTER_TAGS + ["none"]
     ]
 
-    # ── Layout: 3 rows × 3 cols ───────────────────────────────────────────────
-    # Row 0: heatmap C1  | heatmap C2   | tag legend
-    # Row 1: spy C1      | spy C2       | row-sum overlay
-    # Row 2: summary text (full width)
     fig = plt.figure(figsize=(20, 15))
     fig.patch.set_facecolor("#F8F8F8")
     fig.suptitle(
@@ -175,9 +164,8 @@ def main():
     plot_heatmap(ax_h1, case1, s_ids, bounds, tag_map,
                  "Case 1 — Tag Overlap",
                  sns.light_palette("#264653", as_cmap=True))
-
     plot_heatmap(ax_h2, case2, s_ids, bounds, tag_map,
-                 f"Case 2 — VA Distance (t={VA_THRESHOLD})",
+                 "Case 2 — VA Distance (t=0.95)",
                  sns.light_palette("#2A9D8F", as_cmap=True))
 
     ax_leg.axis("off")
@@ -187,7 +175,6 @@ def main():
     plot_spy(ax_s1, case1, s_ids, bounds, "Case 1 — Sparsity Pattern")
     plot_spy(ax_s2, case2, s_ids, bounds, "Case 2 — Sparsity Pattern")
 
-    # Row-sum overlay
     rs1 = case1.values.sum(axis=1)
     rs2 = case2.values.sum(axis=1)
     ax_rs.hist(rs1, bins=25, color="#264653", alpha=0.65, edgecolor="white",
@@ -203,7 +190,6 @@ def main():
     ax_rs.set_facecolor("#F8F8F8")
     sns.despine(ax=ax_rs)
 
-    # Summary text panel
     ax_txt.axis("off")
     ax_txt.text(0.01, 0.95, "Summary", fontsize=11, fontweight="bold",
                 va="top", transform=ax_txt.transAxes)

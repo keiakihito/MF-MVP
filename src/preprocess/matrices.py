@@ -17,7 +17,6 @@ def build_tag_overlap_matrix(df: pd.DataFrame) -> pd.DataFrame:
     interaction[i][j] = 1 if tracks share at least one active character tag.
     """
     tag_matrix = df[CHARACTER_TAGS].values.astype(np.float32)  # (n, 4)
-    # dot product > 0 means at least one shared tag
     overlap = tag_matrix @ tag_matrix.T
     binary = (overlap > 0).astype(np.float32)
     return _wrap(binary, df["track_id"])
@@ -33,7 +32,6 @@ def build_va_distance_matrix(df: pd.DataFrame, threshold: float = 0.7) -> pd.Dat
     sqrt(2) is the max possible distance in the unit [0,1]^2 VA space.
     """
     va = df[["valence", "arousal"]].values.astype(np.float32)  # (n, 2)
-    # pairwise squared distances via broadcast
     diff = va[:, np.newaxis, :] - va[np.newaxis, :, :]         # (n, n, 2)
     dist = np.sqrt((diff ** 2).sum(axis=2))                     # (n, n)
     similarity = 1.0 - dist / np.sqrt(2)

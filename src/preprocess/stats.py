@@ -15,17 +15,17 @@ def summarize(matrix_df: pd.DataFrame, name: str) -> dict:
     is_symmetric = np.allclose(m, m.T)
 
     stats = {
-        "name":        name,
-        "shape":       f"{n} x {n}",
-        "density":     round(m.sum() / total, 4),
-        "symmetric":   is_symmetric,
-        "min":         round(m.min(), 4),
-        "max":         round(m.max(), 4),
-        "mean":        round(m.mean(), 4),
-        "row_sum_min": round(row_sums.min(), 1),
-        "row_sum_max": round(row_sums.max(), 1),
-        "row_sum_mean":round(row_sums.mean(), 2),
-        "row_sum_std": round(row_sums.std(), 2),
+        "name":         name,
+        "shape":        f"{n} x {n}",
+        "density":      round(m.sum() / total, 4),
+        "symmetric":    is_symmetric,
+        "min":          round(m.min(), 4),
+        "max":          round(m.max(), 4),
+        "mean":         round(m.mean(), 4),
+        "row_sum_min":  round(row_sums.min(), 1),
+        "row_sum_max":  round(row_sums.max(), 1),
+        "row_sum_mean": round(row_sums.mean(), 2),
+        "row_sum_std":  round(row_sums.std(), 2),
     }
     return stats
 
