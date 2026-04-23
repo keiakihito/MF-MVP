@@ -1,0 +1,8 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+    "unit: fast isolated unit tests, no file I/O (< 1s each)",
+    "integration: tests that read real CSV files or train models (< 30s total)",
+]
+addopts = "-v --tb=short -m 'not integration'"

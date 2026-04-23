@@ -54,6 +54,36 @@ def _pairwise_va_similarity(va: np.ndarray) -> np.ndarray:
 
     √2 is the max possible distance in the unit [0,1]^2 VA space,
     so similarity is normalized to [0, 1].
+
+　　ex: diff = va[:, np.newaxis, :] - va[np.newaxis, :, :] 
+    j →
+        A     B     C
+
+i  A  A-A   A-B   A-C
+↓  B  B-A   B-B   B-C
+   C  C-A   C-B   C-C
+
+   ① va[:, np.newaxis, :]
+
+    👉 shape: (N, 1, 2)
+
+    [
+    [[A]],
+    [[B]],
+    [[C]]
+    ]
+
+    ② va[np.newaxis, :, :]
+
+    👉 shape: (1, N, 2)
+
+    [
+    [A, B, C]
+    ]
+
+    template
+    X[:, None, :]  # ← row (i)
+    X[None, :, :]  # ← column (j)
     """
     diff = va[:, np.newaxis, :] - va[np.newaxis, :, :]   # (N, N, 2)
     dist = np.sqrt((diff ** 2).sum(axis=2))               # (N, N)

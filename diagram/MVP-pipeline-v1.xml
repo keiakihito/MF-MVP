@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="MVP-Pipeline-v1" id="mvp-pipeline-v1">
+    <mxGraphModel dx="1200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="500" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- LEGEND                                 -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="leg_data" value="Data / Artifact" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="110" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_proc" value="Key Process" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="145" y="20" width="110" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_eval" value="Evaluation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="20" width="110" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- D1: pseudo_labels.csv                  -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="d1" value="&lt;b&gt;pseudo_labels.csv&lt;/b&gt;&#xa;203 tracks · valence, arousal&#xa;energetic / tense / calm / lyrical" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="130" y="80" width="220" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow D1 → P1_box (fork label) -->
+        <mxCell id="e1" value="&lt;i&gt;Feature extraction&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" source="d1" target="p1_box" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- P1: Signal Design (KEY PROCESS)        -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="p1_box" value="&lt;b&gt;Signal Design&lt;/b&gt;&#xa;&lt;i&gt;(src/preprocess/matrices.py)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="90" y="210" width="300" height="160" as="geometry" />
+        </mxCell>
+        <!-- Case 1 row -->
+        <mxCell id="case1_lbl" value="Case 1 — Tag Overlap" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=2;align=left;" vertex="1" parent="1">
+          <mxGeometry x="108" y="248" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="case1_box" value="R[i,j] = 1  if  shared tag ≥ 1&#xa;(tag_vec_i · tag_vec_j) &gt; 0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="105" y="270" width="265" height="34" as="geometry" />
+        </mxCell>
+        <!-- Case 2 row -->
+        <mxCell id="case2_lbl" value="Case 2 — VA Distance  (t = 0.95)" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=2;align=left;" vertex="1" parent="1">
+          <mxGeometry x="108" y="310" width="230" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="case2_box" value="R[i,j] = 1  if  sim(VA_i, VA_j) ≥ 0.95&#xa;sim = 1 − dist(VA_i, VA_j) / √2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="105" y="332" width="265" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow P1 → D2 -->
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;" edge="1" source="p1_box" target="d2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- D2: Interaction Matrices               -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="d2" value="&lt;b&gt;Interaction Matrices&lt;/b&gt;&#xa;matrix_case1_tag_overlap.csv  (density 0.283)&#xa;matrix_case2_va_distance_t095.csv  (density 0.248)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="110" y="435" width="260" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow D2 → P2 -->
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;" edge="1" source="d2" target="p2_box" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- P2: Matrix Factorization (KEY PROCESS) -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="p2_box" value="&lt;b&gt;Matrix Factorization&lt;/b&gt;&#xa;&lt;i&gt;(src/mf/mf_experiment.py)&lt;/i&gt;&#xa;Koren et al. 2009  Eq. 1: r̂_ui = q_i^T p_u" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="90" y="570" width="300" height="175" as="geometry" />
+        </mxCell>
+        <!-- Model detail rows -->
+        <mxCell id="mf_emb" value="P, Q  ∈  ℝ^(203 × 16)  — latent embeddings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="105" y="630" width="265" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="mf_loss" value="Loss: MSE on observed + sampled negatives" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="105" y="661" width="265" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="mf_opt" value="Optimizer: Adam · lr=0.01 · epochs=100 · batch=512" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="105" y="692" width="265" height="26" as="geometry" />
+        </mxCell>
+        <!-- Trained ×2 note -->
+        <mxCell id="mf_note" value="trained separately on Case 1 and Case 2" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;fontStyle=2;align=center;" vertex="1" parent="1">
+          <mxGeometry x="105" y="722" width="265" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow P2 → D3 -->
+        <mxCell id="e4" value="&lt;i&gt;Mean-pool p_u vectors&lt;/i&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" source="p2_box" target="d3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- D3: Latent Embeddings                  -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="d3" value="&lt;b&gt;Latent Embeddings&lt;/b&gt;&#xa;p_u  ∈  ℝ^16  per track (P matrix)&#xa;q_i  ∈  ℝ^16  per track (Q matrix)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="130" y="810" width="220" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow D3 → P3 -->
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;" edge="1" source="d3" target="p3_box" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- P3: Recommendation (KEY PROCESS)       -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="p3_box" value="&lt;b&gt;Recommendation&lt;/b&gt;&#xa;r̂_ui = Q · p_u  for all i&#xa;exclude self · return top-k" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="940" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow P3 → D4 -->
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;" edge="1" source="p3_box" target="d4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- D4: Top-k Recommendations              -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="d4" value="&lt;b&gt;Top-k Recommendations&lt;/b&gt;&#xa;ranked track list per query track" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1075" width="220" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow D4 → P4 -->
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;" edge="1" source="d4" target="p4_box" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- P4: Evaluation (EVAL)                  -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="p4_box" value="&lt;b&gt;Evaluation&lt;/b&gt;&#xa;① Embedding geometry (PCA scatter)&#xa;② 5-fold cross-validation (MSE)&#xa;③ Side-by-side recommendation comparison&#xa;&amp;nbsp;&amp;nbsp;&amp;nbsp;Case 1 vs. Case 2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="1205" width="260" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow P4 → D5 -->
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;" edge="1" source="p4_box" target="d5" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- D5: Results                            -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="d5" value="&lt;b&gt;Results&lt;/b&gt;&#xa;CV-MSE per case · embedding plots&#xa;signal design comparison" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1370" width="220" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- CALLOUT: density note (right side)     -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="density_note" value="&lt;b&gt;Matrix structure:&lt;/b&gt;&#xa;Case 1 → block-diagonal&#xa;&amp;nbsp;&amp;nbsp;(discrete emotion clusters)&#xa;Case 2 → smooth gradient&#xa;&amp;nbsp;&amp;nbsp;(continuous VA space)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="415" y="435" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="density_link" style="dashed=1;rounded=0;html=1;endArrow=open;endSize=6;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="415" y="475" as="sourcePoint" />
+            <mxPoint x="370" y="475" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- CALLOUT: MF note (right side)          -->
+        <!-- ══════════════════════════════════════ -->
+        <mxCell id="mf_callout" value="&lt;b&gt;Koren et al. 2009&lt;/b&gt;&#xa;f = 16 latent dims&#xa;N = 203 tracks&#xa;item-to-item setup&#xa;(no real users)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="415" y="620" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="mf_callout_link" style="dashed=1;rounded=0;html=1;endArrow=open;endSize=6;strokeColor=#d6b656;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="415" y="660" as="sourcePoint" />
+            <mxPoint x="390" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
