@@ -1,0 +1,119 @@
+~/Dropbox/Research/RecSys/Papers/1.Koren/MVP/src/mf main*
+.venv ❯ python mf_experiment.py 
+Loading data...
+  N=203 tracks  |  R_tag density=0.283  R_va density=0.248
+Case 1 (Tag Overlap): 100%|██████| 100/100 [00:08<00:00, 11.48it/s, loss=0.0005]
+Case 2 (VA Distance): 100%|██████| 100/100 [00:07<00:00, 13.41it/s, loss=0.0232]
+Training curve saved → /Users/keita-katsumi/Dropbox/Research/RecSys/Papers/1.Koren/MVP/figures/mf_training_curves.png
+
+================================================================================
+Query: id=6  [tense+calm]  V=0.26 A=0.35
+  Prelude A L'Unisson
+================================================================================
+
+           --- Case 1: Tag Overlap (expect same-cluster results) ---            
+  id=12   [tense               ] V=0.35 A=0.38  Serenade For Strings In G Minor, Op. 27a
+  id=146  [tense               ] V=0.30 A=0.36  Carmen Suite: Adagio
+  id=182  [tense               ] V=0.36 A=0.38  Sinfonia Concertante Andante
+  id=171  [tense               ] V=0.30 A=0.35  Langsamer Satz
+  id=119  [tense+calm          ] V=0.26 A=0.30  Sonata N 3, Op. 25 - Andante Sostenuto E
+  id=126  [tense               ] V=0.33 A=0.41  Stabat Mater: 3. O Quam tristis et affli
+  id=24   [tense+calm          ] V=0.31 A=0.33  Simple Symphony: I. Sentimental Serenade
+  id=195  [tense               ] V=0.29 A=0.38  Prelude and Scherzo Op. 11: I. Prelude
+  id=39   [tense               ] V=0.28 A=0.38  Minimax "Repertorium Für Militärmusik": 
+  id=78   [calm                ] V=0.47 A=0.35  Prelude In E Flat, Op. 23 No. 6
+
+        --- Case 2: VA Distance (expect smoother, cross-tag results) ---        
+  id=39   [tense               ] V=0.28 A=0.38  Minimax "Repertorium Für Militärmusik": 
+  id=92   [tense+calm          ] V=0.27 A=0.34  Romanian Folk Dances, Sz. 56: III. Pe lo
+  id=153  [tense+calm          ] V=0.26 A=0.30  Six Songs: IV. Geheimes
+  id=34   [tense               ] V=0.29 A=0.36  Verklärte Nacht, Op. 4
+  id=27   [tense+calm          ] V=0.30 A=0.34  Concerto Grosso
+  id=8    [tense+calm          ] V=0.29 A=0.34  Concerto For 2 Violins And Strings, Op. 
+  id=195  [tense               ] V=0.29 A=0.38  Prelude and Scherzo Op. 11: I. Prelude
+  id=171  [tense               ] V=0.30 A=0.35  Langsamer Satz
+  id=175  [tense+calm          ] V=0.28 A=0.32  Kaddish for Viola and String Orchestra
+  id=129  [tense               ] V=0.30 A=0.37  Stabat Mater: 6. Vidit suum dulcem natum
+
+
+================================================================================
+Query: id=65  [tense]  V=0.35 A=0.37
+  Las Cuatro Estaciones Portenas: Verano Porteno
+================================================================================
+
+           --- Case 1: Tag Overlap (expect same-cluster results) ---            
+  id=24   [tense+calm          ] V=0.31 A=0.33  Simple Symphony: I. Sentimental Serenade
+  id=146  [tense               ] V=0.30 A=0.36  Carmen Suite: Adagio
+  id=198  [tense+calm          ] V=0.33 A=0.29  Piano Concerto No. 1 in C Minor, Op. 35:
+  id=186  [tense               ] V=0.35 A=0.36  Orchestral Suite No. 3, Bmv 1068: II. Ai
+  id=182  [tense               ] V=0.36 A=0.38  Sinfonia Concertante Andante
+  id=173  [tense+calm          ] V=0.33 A=0.35  Pictures At An Exhibition
+  id=174  [tense               ] V=0.26 A=0.35  Prelude a L'unisson
+  id=163  [tense+calm          ] V=0.34 A=0.32  Sinfonia Concertante In E-Flat Major, K.
+  id=155  [tense               ] V=0.32 A=0.42  Six Songs: VI. An Sylvia
+  id=124  [tense               ] V=0.34 A=0.37  Stabat Mater: 1. Stabat Mater Dolorosa
+
+        --- Case 2: VA Distance (expect smoother, cross-tag results) ---        
+  id=141  [lyrical             ] V=0.39 A=0.39  Carmen Suite: Scene
+  id=79   [none                ] V=0.39 A=0.41  Piano Quintet - Molto Moderato Quasi Len
+  id=81   [none                ] V=0.37 A=0.42  Piano Quintet - Allegro Non Troppo Ma Co
+  id=163  [tense+calm          ] V=0.34 A=0.32  Sinfonia Concertante In E-Flat Major, K.
+  id=111  [calm                ] V=0.36 A=0.34  Trio Op 50 - Variazione Finale E Coda
+  id=162  [calm                ] V=0.37 A=0.33  Sinfonia Concertante In E-Flat Major, K.
+  id=154  [calm                ] V=0.38 A=0.35  Six Songs: V. Fischerweise
+  id=120  [lyrical             ] V=0.37 A=0.40  Sonata N 3, Op. 25 - Allegro Con Brio Ma
+  id=117  [tense+calm          ] V=0.35 A=0.34  Poeme Elegiac
+  id=74   [tense+calm          ] V=0.35 A=0.34  Souvenir De Florence - Adagio Cantabile 
+
+
+================================================================================
+Query: id=129  [tense]  V=0.30 A=0.37
+  Stabat Mater: 6. Vidit suum dulcem natum
+================================================================================
+
+           --- Case 1: Tag Overlap (expect same-cluster results) ---            
+  id=24   [tense+calm          ] V=0.31 A=0.33  Simple Symphony: I. Sentimental Serenade
+  id=198  [tense+calm          ] V=0.33 A=0.29  Piano Concerto No. 1 in C Minor, Op. 35:
+  id=173  [tense+calm          ] V=0.33 A=0.35  Pictures At An Exhibition
+  id=163  [tense+calm          ] V=0.34 A=0.32  Sinfonia Concertante In E-Flat Major, K.
+  id=6    [tense+calm          ] V=0.26 A=0.35  Prelude A L'Unisson
+  id=27   [tense+calm          ] V=0.30 A=0.34  Concerto Grosso
+  id=93   [tense+calm          ] V=0.30 A=0.32  Romanian Folk Dances, Sz. 56: IV. Bucsum
+  id=119  [tense+calm          ] V=0.26 A=0.30  Sonata N 3, Op. 25 - Andante Sostenuto E
+  id=166  [tense+calm          ] V=0.33 A=0.31  Quartetto Serioso In F Minor, Op.95: II.
+  id=175  [tense+calm          ] V=0.28 A=0.32  Kaddish for Viola and String Orchestra
+
+        --- Case 2: VA Distance (expect smoother, cross-tag results) ---        
+  id=124  [tense               ] V=0.34 A=0.37  Stabat Mater: 1. Stabat Mater Dolorosa
+  id=204  [tense               ] V=0.35 A=0.37  Elegie
+  id=15   [tense               ] V=0.35 A=0.37  Adagio and Fuge in C Minor, KV 546: I. A
+  id=65   [tense               ] V=0.35 A=0.37  Las Cuatro Estaciones Portenas: Verano P
+  id=190  [tense               ] V=0.35 A=0.36  Sinfonia Concertante, K. 364: II. Andant
+  id=135  [tense               ] V=0.32 A=0.41  Stabat Mater: 12. Quando corpus morietur
+  id=5    [tense+calm          ] V=0.35 A=0.35  Adagio in g minor
+  id=148  [tense               ] V=0.29 A=0.39  Carmen Suite: Finale
+  id=172  [tense               ] V=0.35 A=0.37  Variations On A Rococo Theme, Op. 33
+  id=72   [tense+calm          ] V=0.29 A=0.35  Deaths Of The Angel
+
+Embedding plot saved → /Users/keita-katsumi/Dropbox/Research/RecSys/Papers/1.Koren/MVP/figures/mf_embeddings.png
+
+Running 5-fold CV (this trains 10 models)...
+CV Tag fold 1/5: 100%|█████████████| 50/50 [00:03<00:00, 13.58it/s, loss=0.0230]
+CV Tag fold 2/5: 100%|█████████████| 50/50 [00:03<00:00, 14.07it/s, loss=0.0220]
+CV Tag fold 3/5: 100%|█████████████| 50/50 [00:03<00:00, 14.27it/s, loss=0.0217]
+CV Tag fold 4/5: 100%|█████████████| 50/50 [00:03<00:00, 13.16it/s, loss=0.0218]
+CV Tag fold 5/5: 100%|█████████████| 50/50 [00:03<00:00, 14.71it/s, loss=0.0235]
+CV VA  fold 1/5: 100%|█████████████| 50/50 [00:03<00:00, 16.52it/s, loss=0.0367]
+CV VA  fold 2/5: 100%|█████████████| 50/50 [00:03<00:00, 16.55it/s, loss=0.0382]
+CV VA  fold 3/5: 100%|█████████████| 50/50 [00:03<00:00, 16.58it/s, loss=0.0374]
+CV VA  fold 4/5: 100%|█████████████| 50/50 [00:03<00:00, 16.55it/s, loss=0.0365]
+CV VA  fold 5/5: 100%|█████████████| 50/50 [00:02<00:00, 16.84it/s, loss=0.0378]
+
+==================================================
+  K-Fold CV Results (5 folds, f=16, epochs=50)
+==================================================
+  Case 1 Tag Overlap:  MSE = 0.1011 ± 0.0042
+  Case 2 VA Distance:  MSE = 0.1315  ± 0.0067
+==================================================
+  Lower MSE = signal is more consistently learnable by MF
+

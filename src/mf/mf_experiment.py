@@ -23,6 +23,7 @@ Usage (from project root):
     PYTHONPATH=src .venv/bin/python src/mf/mf_experiment.py
 """
 
+from doctest import Example
 import os
 import numpy as np
 import pandas as pd
@@ -113,6 +114,25 @@ class MFModel(nn.Module):
 # Section 3 — Training Set Construction  (κ in paper)
 # =============================================================================
 
+# Example interaction matrix R:
+#        i=0  i=1  i=2
+# u=0     1    0    1
+# u=1     0    1    0
+# u=2     1    0    0
+#
+# Indices of positive interactions (R[u, i] = 1):
+#   (0, 0)
+#   (0, 2)
+#   (1, 1)
+#   (2, 0)
+#
+# So,
+#   u_idx = [0, 0, 1, 2]
+#   i_idx = [0, 2, 1, 0]
+#
+# Positive samples:  (0,0), (0,2), (1,1), (2,0)
+# Negative samples (where R[u,i]=0): (0,1), (1,0), (1,2), (2,1)
+
 def _sample_observed(R: np.ndarray):
     """
     Extract all known positive interactions — the set κ in Eq. 2.
@@ -133,6 +153,23 @@ def _sample_unobserved(R: np.ndarray, n_samples: int):
     choice = np.random.choice(len(neg_u), size=n_samples, replace=False)
     return neg_u[choice], neg_i[choice]
 
+# suppose observed label, r_ui  = [1,1,1,1, 0,0]
+# (u, i, r_ui)
+#  Postive
+# (0,0,1)
+# (0,2,1)
+# (1,1,1)
+# (2,0,1)
+
+# negative, not using all negative samples
+# (1,0,0)
+# (2,2,0)
+
+#  Concat
+# u_idx = [0,0,1,2, 1,2]
+# i_idx = [0,2,1,0, 0,2]
+# r_ui  = [1,1,1,1, 0,0]
+# These are just index labels for indicating which vecntor is used in the training.
 
 def build_training_set(R: np.ndarray, confidence_ratio: float = 1.0):
     """
